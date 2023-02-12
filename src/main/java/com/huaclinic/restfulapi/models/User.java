@@ -1,25 +1,34 @@
 package com.huaclinic.restfulapi.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import java.util.Set;
 
-public class User {
+@MappedSuperclass
+public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
-
+    @Column(unique = true)
     private String username;
 
     @Enumerated(EnumType.STRING)
-    private Permission permission;
-
+    private Set<Permission> permission;
     private String password;
+
+    @Override
+    public String toString() {
+        return String.format(
+                "USER[id=%d, name='%s', password='%s']",
+                id, username, password);
+    }
 
     public Integer getId() {
         return id;
@@ -37,19 +46,11 @@ public class User {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Permission getPermission() {
+    public Set<Permission> getPermission() {
         return permission;
     }
 
-    public void setPermission(Permission permission) {
+    public void setPermission(Set<Permission> permission) {
         this.permission = permission;
     }
 
