@@ -23,6 +23,14 @@ public abstract class User {
     private Set<Permission> permission;
     private String password;
 
+    
+
+    public User(String username, Set<Permission> permission, String password) {
+        this.username = username;
+        this.permission = permission;
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return String.format(
