@@ -6,17 +6,17 @@ import java.util.Set;
 
 @Entity
 public class Patient extends Users{
-    private String name;
+    private String pname;
     
     public Patient(String username, Set<Permission> permission, String password, String name) {
         super(username, permission, password, name);
-        this.name = name;
+        this.pname = name;
     }
     public String getName() {
-        return name;
+        return pname;
     }
     public void setName(String name) {
-        this.name = name;
+        this.pname = name;
     }
 
     @OneToMany(mappedBy = "patient")

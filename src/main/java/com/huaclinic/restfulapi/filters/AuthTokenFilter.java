@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.huaclinic.restfulapi.services.CustomUserDetails;
 import com.huaclinic.restfulapi.services.CustomUserDetailsService;
 import com.huaclinic.restfulapi.util.JwtUtils;
 
@@ -34,7 +32,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
         try{
             String jwt = parseJwt(req);
             if(jwt != null && jwtUtils.validateJwtToken(jwt)) {
@@ -45,6 +42,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
+            } else {
+                logger.info("No Token");
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);

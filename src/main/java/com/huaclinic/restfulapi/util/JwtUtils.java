@@ -25,7 +25,7 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("$huaclinic.app.jwtSecret")
+    @Value("${huaclinic.app.jwtSecret}")
     private String secret;
 
     @Value("${huaclinic.app.jwtExpirationMs}")

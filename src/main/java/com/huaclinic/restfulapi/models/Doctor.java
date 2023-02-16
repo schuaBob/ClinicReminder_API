@@ -6,18 +6,24 @@ import jakarta.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
-public class Doctor extends Users{
-    private String name;
-    
+public class Doctor extends Users {
+    private String dname;
+
+    public Doctor() {
+        super();
+    }
+
     public Doctor(String username, Set<Permission> permission, String password, String name) {
         super(username, permission, password, name);
-        this.name = name;
+        this.dname = name;
     }
+
     public String getName() {
-        return name;
+        return dname;
     }
+
     public void setName(String name) {
-        this.name = name;
+        this.dname = name;
     }
 
     @OneToMany(mappedBy = "doctor")

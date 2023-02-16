@@ -35,7 +35,7 @@ public class SecurityConfiguration {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        // authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(new CustomPasswordEncoder());
         return authProvider;
     }
 
@@ -44,15 +44,14 @@ public class SecurityConfiguration {
         return authConfiguration.getAuthenticationManager();
     }
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(this.authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers("/auth/**").permitAll();
-                    auth.anyRequest().authenticated();
-                });
+                .authorizeHttpRequests().requestMatchers("/auth/**", "/user/**", "/greeting/**").permitAll()
+                .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

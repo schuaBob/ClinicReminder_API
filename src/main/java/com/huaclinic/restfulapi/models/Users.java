@@ -29,7 +29,9 @@ public class Users {
     private String password;
 
     
-
+    public Users () {
+        
+    }
     public Users(String username, Set<Permission> permission, String password, String name) {
         this.username = username;
         this.permission = permission;

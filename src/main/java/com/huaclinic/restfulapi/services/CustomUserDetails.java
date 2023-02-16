@@ -32,55 +32,56 @@ public class CustomUserDetails implements UserDetails {
     public static CustomUserDetails build(Users user) {
         List<GrantedAuthority> authorities = user.getPermission().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.name()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());       
         return new CustomUserDetails(user.getId(), user.getName(), user.getUsername(), user.getPassword(), authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
+
         return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        // TODO Auto-generated method stub
+
         return this.password;
     }
 
     @Override
     public String getUsername() {
-        // TODO Auto-generated method stub
+
         return this.username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
+
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
+
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
+
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
+
         return true;
     }
 
     public Integer getId() {
         return this.id;
     }
+
     public String getName() {
         return this.name;
     }

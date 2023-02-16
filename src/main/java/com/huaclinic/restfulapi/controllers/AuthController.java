@@ -1,7 +1,6 @@
 package com.huaclinic.restfulapi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import com.huaclinic.restfulapi.payload.response.LoginRes;
+import com.huaclinic.restfulapi.payload.response.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,10 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     public ResponseEntity<LoginRes> authSignIn(@RequestBody LoginReq loginReq) {
+        // System.out.println("Hello " + loginReq.getUsername() + " " +
+        // loginReq.getPassword());
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
@@ -46,8 +47,10 @@ public class AuthController {
                 new LoginRes(userDetails.getId(), userDetails.getUsername(), userDetails.getName(), permissions));
     }
 
-    @PostMapping("/login")
-    public String login() {
-        return "This is Login.";
+    @PostMapping("/signout")
+    public ResponseEntity<MessageRes> logoutUser() {
+        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new MessageRes("You've been signed out!"));
     }
 }

@@ -34,7 +34,6 @@ public class RequestResponseFilter {
                 throws IOException, ServletException {
             HttpServletResponse res = (HttpServletResponse) response;
             chain.doFilter(request, response);
-            System.out.println(res.getContentType());
         }
     }
 }

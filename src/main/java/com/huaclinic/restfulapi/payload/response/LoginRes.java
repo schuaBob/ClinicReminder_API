@@ -1,7 +1,6 @@
 package com.huaclinic.restfulapi.payload.response;
 
 import java.util.List;
-import com.huaclinic.restfulapi.models.Permission;
 
 public class LoginRes {
     private Integer id;
