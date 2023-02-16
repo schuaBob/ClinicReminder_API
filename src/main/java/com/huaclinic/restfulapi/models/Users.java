@@ -1,20 +1,25 @@
 package com.huaclinic.restfulapi.models;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import java.util.Set;
 
-@MappedSuperclass
-public abstract class User {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    private String name;
 
     @Column(unique = true)
     private String username;
@@ -25,16 +30,17 @@ public abstract class User {
 
     
 
-    public User(String username, Set<Permission> permission, String password) {
+    public Users(String username, Set<Permission> permission, String password, String name) {
         this.username = username;
         this.permission = permission;
         this.password = password;
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "USER[id=%d, name='%s', password='%s']",
+                "USERs[id=%d, name='%s', password='%s']",
                 id, username, password);
     }
 
@@ -68,5 +74,13 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

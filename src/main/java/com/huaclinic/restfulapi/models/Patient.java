@@ -5,11 +5,11 @@ import jakarta.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
-public class Patient extends User{
+public class Patient extends Users{
     private String name;
     
     public Patient(String username, Set<Permission> permission, String password, String name) {
-        super(username, permission, password);
+        super(username, permission, password, name);
         this.name = name;
     }
     public String getName() {

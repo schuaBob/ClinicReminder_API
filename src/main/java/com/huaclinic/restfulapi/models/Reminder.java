@@ -43,6 +43,7 @@ public class Reminder {
 
     @OneToMany(mappedBy = "reminder")
     private Set<ReminderRecord> reminderRecords;
+    
 
 
 }
