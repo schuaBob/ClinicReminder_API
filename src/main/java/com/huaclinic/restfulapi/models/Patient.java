@@ -8,6 +8,9 @@ import java.util.Set;
 public class Patient extends Users{
     private String pname;
     
+    public Patient() {
+        super();
+    }
     public Patient(String username, Set<Permission> permission, String password, String name) {
         super(username, permission, password, name);
         this.pname = name;

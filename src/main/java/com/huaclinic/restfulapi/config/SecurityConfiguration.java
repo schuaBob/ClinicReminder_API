@@ -18,7 +18,6 @@ import com.huaclinic.restfulapi.services.CustomUserDetailsService;
 
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -53,8 +52,8 @@ public class SecurityConfiguration {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        // config.setAllowCredentials(true); // you USUALLY want this
-        config.addAllowedOrigin("*");
+        config.setAllowCredentials(true); // you USUALLY want this
+        config.addAllowedOrigin("http://localhost:4200");
         config.addAllowedHeader("*");
         config.addAllowedMethod("OPTIONS");
         config.addAllowedMethod("HEAD");
@@ -76,7 +75,7 @@ public class SecurityConfiguration {
         }).csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(this.authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers("/auth/**", "/user/**", "/greeting/**").permitAll()
+                .authorizeHttpRequests().requestMatchers("/user/**", "/greeting/**", "/auth/**").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());

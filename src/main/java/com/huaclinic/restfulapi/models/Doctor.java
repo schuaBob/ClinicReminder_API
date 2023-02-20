@@ -28,4 +28,8 @@ public class Doctor extends Users {
 
     @OneToMany(mappedBy = "doctor")
     private Set<DoctorPatient> doctorPatients;
+
+    public Set<DoctorPatient> getDoctorPatients() {
+        return this.doctorPatients;
+    }
 }

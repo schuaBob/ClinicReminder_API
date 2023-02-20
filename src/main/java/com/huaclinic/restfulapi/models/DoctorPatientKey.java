@@ -12,6 +12,10 @@ public class DoctorPatientKey implements Serializable {
     @Column(name = "patient_id")
     private Integer patientId;
     
+    public DoctorPatientKey() {
+
+    }
+    
     public DoctorPatientKey(Integer doctorId, Integer patientId) {
         this.doctorId = doctorId;
         this.patientId = patientId;

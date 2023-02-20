@@ -17,6 +17,9 @@ public class DoctorPatient {
     @EmbeddedId
     private DoctorPatientKey pk;
 
+    public DoctorPatient() {
+
+    }
     public DoctorPatient(Doctor doctor, Patient patient) {
         this.pk = new DoctorPatientKey(doctor.getId(), patient.getId());
         this.doctor = doctor;
@@ -35,5 +38,12 @@ public class DoctorPatient {
 
     @OneToMany(mappedBy = "doctorpatient")
     private Set<ReminderRecord> reminderRecords;
+
+    public Doctor getDoctor() {
+        return this.doctor;
+    }
+    public Patient getPatient() {
+        return this.patient;
+    }
 
 }

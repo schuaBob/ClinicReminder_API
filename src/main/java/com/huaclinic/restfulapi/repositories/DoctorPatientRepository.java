@@ -6,5 +6,4 @@ import com.huaclinic.restfulapi.models.DoctorPatient;
 import com.huaclinic.restfulapi.models.DoctorPatientKey;
 
 public interface DoctorPatientRepository extends CrudRepository<DoctorPatient, DoctorPatientKey> {
-
 }
