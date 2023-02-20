@@ -2,7 +2,6 @@ package com.huaclinic.restfulapi.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.huaclinic.restfulapi.repositories.DoctorRepository;
 import com.huaclinic.restfulapi.models.DoctorPatient;

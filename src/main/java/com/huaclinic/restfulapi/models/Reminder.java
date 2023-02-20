@@ -48,6 +48,10 @@ public class Reminder {
 
     private Boolean done = false;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "done_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private Date doneTime;
+
     @OneToMany(mappedBy = "reminder")
     private Set<ReminderRecord> reminderRecords;
 
@@ -106,4 +110,22 @@ public class Reminder {
     public void setDone(Boolean done) {
         this.done = done;
     }
+
+    public Date getDoneTime() {
+        return doneTime;
+    }
+
+    public void setDoneTime(Date doneTime) {
+        this.doneTime = doneTime;
+    }
+
+    public Set<ReminderRecord> getReminderRecords() {
+        return reminderRecords;
+    }
+
+    public void setReminderRecords(Set<ReminderRecord> reminderRecords) {
+        this.reminderRecords = reminderRecords;
+    }
+    
+    
 }
