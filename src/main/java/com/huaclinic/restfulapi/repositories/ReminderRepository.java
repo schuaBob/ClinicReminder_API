@@ -27,16 +27,26 @@ public interface ReminderRepository extends CrudRepository<Reminder, Integer> {
     List<Object[]> findAllOrderByPriorityDESC(Integer doctorId, boolean done);
 
     @Query(value = """
-    SELECT
-        CREATE_TIME\\:\\:date,
-        COUNT(CREATE_TIME\\:\\:date)
-    FROM REMINDER AS R
-    LEFT JOIN REMINDER_RECORD AS RR ON RR.REMINDER_ID = R.ID
-    WHERE RR.DOCTOR_ID = ?1
-        AND RR.PATIENT_ID = ?2
-        AND CREATE_TIME\\:\\:date BETWEEN (NOW() - (interval '8d'))\\:\\:date AND (NOW() - (interval '0d'))\\:\\:date
-        AND (DUE_TIME < NOW() AND (DUE_TIME < DONE_TIME or DONE_TIME IS NULL))
-    GROUP BY CREATE_TIME\\:\\:date
+                SELECT r.id, r.description, r.priority, r.due_time, r.done
+                FROM reminder AS r
+                LEFT JOIN reminder_record AS rr
+                ON r.id = rr.reminder_id
+                WHERE rr.patient_id = ?1
+                ORDER BY r.create_time DESC
             """, nativeQuery = true)
+    List<Object[]> findAllByPatientId(Integer patientId, boolean done);
+
+    @Query(value = """
+            SELECT
+                CREATE_TIME\\:\\:date,
+                COUNT(CREATE_TIME\\:\\:date)
+            FROM REMINDER AS R
+            LEFT JOIN REMINDER_RECORD AS RR ON RR.REMINDER_ID = R.ID
+            WHERE RR.DOCTOR_ID = ?1
+                AND RR.PATIENT_ID = ?2
+                AND CREATE_TIME\\:\\:date BETWEEN (NOW() - (interval '8d'))\\:\\:date AND (NOW() - (interval '0d'))\\:\\:date
+                AND (DUE_TIME < NOW() AND (DUE_TIME < DONE_TIME or DONE_TIME IS NULL))
+            GROUP BY CREATE_TIME\\:\\:date
+                    """, nativeQuery = true)
     List<Object[]> findAllinLast7days(Integer doctorId, Integer patientId);
 }

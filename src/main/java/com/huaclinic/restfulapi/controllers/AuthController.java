@@ -37,13 +37,14 @@ public class AuthController {
                 .authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
         context.setAuthentication(authentication);
         CustomUserDetails userDetails = (CustomUserDetails) context.getAuthentication().getPrincipal();
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        String jwt = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
+        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails, jwt);
 
         List<String> permissions = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(
-                new LoginRes(userDetails.getId(), userDetails.getUsername(), userDetails.getName(), permissions));
+                new LoginRes(userDetails.getId(), userDetails.getUsername(), userDetails.getName(), permissions, jwt));
     }
 
     @PostMapping("/signout")

@@ -7,13 +7,20 @@ public class LoginRes {
     private String username;
     private String name;
     private List<String> permissions;
-    public LoginRes(Integer id, String username, String name, List<String> permissions) {
+    private String jwt;
+    public LoginRes(Integer id, String username, String name, List<String> permissions, String jwt) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.permissions = permissions;
+        this.jwt = jwt;
     }
-
+    public String getJwt() {
+        return jwt;
+    }
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
+    }
     public Integer getId() {
         return id;
     }

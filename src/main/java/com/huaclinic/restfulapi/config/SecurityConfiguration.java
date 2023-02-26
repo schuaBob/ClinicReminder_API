@@ -1,8 +1,11 @@
 package com.huaclinic.restfulapi.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.huaclinic.restfulapi.filters.AuthTokenFilter;
+import com.huaclinic.restfulapi.models.Permission;
 import com.huaclinic.restfulapi.services.CustomUserDetailsService;
 
 import org.springframework.web.cors.CorsConfiguration;
@@ -52,8 +56,8 @@ public class SecurityConfiguration {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); // you USUALLY want this
-        config.addAllowedOrigin("http://localhost:4200");
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://172.30.192.1:8100"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("OPTIONS");
         config.addAllowedMethod("HEAD");
@@ -75,8 +79,14 @@ public class SecurityConfiguration {
         }).csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(this.authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers("/user/**", "/greeting/**", "/auth/**").permitAll()
-                .anyRequest().authenticated();
+                .authorizeHttpRequests((auth) ->{
+                    auth.requestMatchers("/user/**", "/greeting/**", "/auth/**").permitAll();
+                    auth.requestMatchers("/api/doctor/**").hasAuthority(Permission.DOCTOR.name());
+                    auth.requestMatchers("/api/patient/**").hasAuthority(Permission.PATIENT.name());
+                    auth.requestMatchers(HttpMethod.POST, "/api/reminder").hasAuthority(Permission.DOCTOR.name());
+                    auth.requestMatchers(HttpMethod.PUT, "/api/reminder/**").hasAuthority(Permission.PATIENT.name());
+                    auth.anyRequest().authenticated();
+                });
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

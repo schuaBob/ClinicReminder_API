@@ -20,6 +20,9 @@ import java.util.Set;
 @Entity
 public class Reminder {
 
+    public Reminder() {
+
+    }
     public Reminder(String description, Integer duration, Priority priority, Date dueTime) {
         this.description = description;
         this.duration = duration;

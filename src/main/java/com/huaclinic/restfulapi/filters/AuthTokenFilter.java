@@ -46,13 +46,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 logger.info("No Token");
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.error("Cannot set user authentication", e);
         }
         filterChain.doFilter(req, res);        
     }
 
     private String parseJwt(HttpServletRequest req) {
         String jwt = jwtUtils.getJwtFromCookies(req);
+        jwt = (jwt != null) ? jwt : jwtUtils.getJwtFromHeaders(req);
         return jwt;
     }
 

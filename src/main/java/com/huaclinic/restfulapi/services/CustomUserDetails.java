@@ -32,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
     public static CustomUserDetails build(Users user) {
         List<GrantedAuthority> authorities = user.getPermission().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.name()))
-                .collect(Collectors.toList());       
+                .collect(Collectors.toList());
         return new CustomUserDetails(user.getId(), user.getName(), user.getUsername(), user.getPassword(), authorities);
     }
 

@@ -42,11 +42,16 @@ public class JwtUtils {
             return null;
         }
     }
+    public String getJwtFromHeaders(HttpServletRequest req) {
+        String jwt = req.getHeader("Authorization");
+        logger.debug("Print jwting");
+        logger.debug(jwt);
+        return jwt;
+    }
 
-    public ResponseCookie generateJwtCookie(CustomUserDetails userPrincipal) {
-        String jwt = generateTokenFromUsername(userPrincipal.getUsername());
+    public ResponseCookie generateJwtCookie(CustomUserDetails userPrincipal, String jwt) {
         ResponseCookie cookie = ResponseCookie.from(this.jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60)
-                .httpOnly(true).build();
+                .httpOnly(true).sameSite("None").secure(false).build();
         return cookie;
     }
 
