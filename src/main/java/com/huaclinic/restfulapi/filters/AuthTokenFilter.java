@@ -32,29 +32,34 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws ServletException, IOException {
-        try{
-            String jwt = parseJwt(req);
-            if(jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUsernameFromJwtToken(jwt);
-                UserDetails userDetails = userDetailService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
-                context.setAuthentication(authentication);
-                SecurityContextHolder.setContext(context);
-            } else {
-                logger.info("No Token");
-            }
+        try {
+            authenticate(req);
         } catch (Exception e) {
             logger.error("Cannot set user authentication", e);
         }
-        filterChain.doFilter(req, res);        
+        filterChain.doFilter(req, res);
     }
 
     private String parseJwt(HttpServletRequest req) {
         String jwt = jwtUtils.getJwtFromCookies(req);
         jwt = (jwt != null) ? jwt : jwtUtils.getJwtFromHeaders(req);
         return jwt;
+    }
+
+    private void authenticate(HttpServletRequest req) {
+        String jwt = parseJwt(req);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            String username = jwtUtils.getUsernameFromJwtToken(jwt);
+            UserDetails userDetails = userDetailService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                    null, userDetails.getAuthorities());
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+        } else {
+            logger.info("No Token");
+        }
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.socket.EnableWebSocketSecurity;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
@@ -57,7 +58,7 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://172.30.192.1:8100"));
+        config.setAllowedOrigins(Arrays.asList("http://172.21.234.73:4200", "http://172.21.224.1:8100"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("OPTIONS");
         config.addAllowedMethod("HEAD");
@@ -80,7 +81,7 @@ public class SecurityConfiguration {
                 .exceptionHandling().authenticationEntryPoint(this.authEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests((auth) ->{
-                    auth.requestMatchers("/user/**", "/greeting/**", "/auth/**").permitAll();
+                    auth.requestMatchers("/user/**", "/greeting/**", "/auth/**","/notificationHandler").permitAll();
                     auth.requestMatchers("/api/doctor/**").hasAuthority(Permission.DOCTOR.name());
                     auth.requestMatchers("/api/patient/**").hasAuthority(Permission.PATIENT.name());
                     auth.requestMatchers(HttpMethod.POST, "/api/reminder").hasAuthority(Permission.DOCTOR.name());

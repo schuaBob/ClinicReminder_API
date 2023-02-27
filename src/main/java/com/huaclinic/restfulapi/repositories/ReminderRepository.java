@@ -44,7 +44,7 @@ public interface ReminderRepository extends CrudRepository<Reminder, Integer> {
             LEFT JOIN REMINDER_RECORD AS RR ON RR.REMINDER_ID = R.ID
             WHERE RR.DOCTOR_ID = ?1
                 AND RR.PATIENT_ID = ?2
-                AND CREATE_TIME\\:\\:date BETWEEN (NOW() - (interval '8d'))\\:\\:date AND (NOW() - (interval '0d'))\\:\\:date
+                AND CREATE_TIME\\:\\:date BETWEEN (NOW() - (interval '7d'))\\:\\:date AND (NOW() - (interval '1d'))\\:\\:date
                 AND (DUE_TIME < NOW() AND (DUE_TIME < DONE_TIME or DONE_TIME IS NULL))
             GROUP BY CREATE_TIME\\:\\:date
                     """, nativeQuery = true)
