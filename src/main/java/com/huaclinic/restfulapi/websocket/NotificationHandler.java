@@ -23,10 +23,6 @@ public class NotificationHandler extends TextWebSocketHandler{
         Iterator<Pair<WebSocketSession, String>> itr = subscribers.iterator();
         while(itr.hasNext()) {
             Pair<WebSocketSession, String> p = itr.next();
-            if(p.getSecond().equals(username)) {
-                subscribers.remove(p);
-                continue;
-            }
             if(p.getFirst().getId().equals(session.getId())) {
                 subscribers.remove(p);
                 subscribers.add(Pair.of(p.getFirst(), username));
