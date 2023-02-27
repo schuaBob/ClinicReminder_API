@@ -18,7 +18,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(notificationHandler(), "/notificationHandler")
-                .setAllowedOrigins("http://172.21.224.1:8100");
+                .setAllowedOrigins("http://172.24.240.1:8100");
     }
 
     @Bean

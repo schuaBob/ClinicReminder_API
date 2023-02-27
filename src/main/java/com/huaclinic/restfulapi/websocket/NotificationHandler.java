@@ -19,12 +19,17 @@ public class NotificationHandler extends TextWebSocketHandler{
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         String payload = message.getPayload();
+        String username = jwtUtils.getUsernameFromJwtToken(payload);
         Iterator<Pair<WebSocketSession, String>> itr = subscribers.iterator();
         while(itr.hasNext()) {
             Pair<WebSocketSession, String> p = itr.next();
+            if(p.getSecond().equals(username)) {
+                subscribers.remove(p);
+                continue;
+            }
             if(p.getFirst().getId().equals(session.getId())) {
                 subscribers.remove(p);
-                subscribers.add(Pair.of(p.getFirst(), jwtUtils.getUsernameFromJwtToken(payload)));
+                subscribers.add(Pair.of(p.getFirst(), username));
                 break;
             }
         }
@@ -52,13 +57,11 @@ public class NotificationHandler extends TextWebSocketHandler{
             Pair<WebSocketSession, String> p = itr.next();
             System.out.println(String.format("%s ~ %s", p.getSecond(), username));
             if(p.getSecond().equals(username)) {
-                System.out.println("Finded!!!!!!!!!!!!!!!");
                 TextMessage tm = new TextMessage(reminder.getDescription());
                 p.getFirst().sendMessage(tm);
                 break;
             }
         }
-        System.out.println("pushed@@@@@@@@@@@@@@@@@");
     }
     
 }

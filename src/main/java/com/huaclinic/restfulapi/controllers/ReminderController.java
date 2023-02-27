@@ -26,6 +26,7 @@ import com.huaclinic.restfulapi.models.ReminderRecord;
 import com.huaclinic.restfulapi.payload.request.ReminderReq;
 import com.huaclinic.restfulapi.payload.response.MessageRes;
 import com.huaclinic.restfulapi.websocket.NotificationHandler;
+
 @RestController
 @RequestMapping("/api/reminder")
 public class ReminderController {
@@ -37,7 +38,7 @@ public class ReminderController {
     private ReminderRecordRepository rrRepo;
 
     @PostMapping()
-    public MessageRes createReminder(@RequestBody ReminderReq rRq) throws IOException {
+    public MessageRes createReminder(@RequestBody ReminderReq rRq){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.HOUR_OF_DAY, rRq.getDuration());
@@ -51,7 +52,11 @@ public class ReminderController {
         
         rrRepo.save(rr);
         MessageRes res = new MessageRes("good");
-        NotificationHandler.pushNotification( dp.getPatient().getUsername(), reminder);
+        try{
+            NotificationHandler.pushNotification( dp.getPatient().getUsername(), reminder);
+        } catch (IOException err) {
+            System.out.print("error in pusing");
+        }
         return res;
     }
 
